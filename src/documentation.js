@@ -116,11 +116,14 @@ module.exports = function() {
             limit: 9999,
           })
         )
-        .then(results => results.items.map(
-          part => aws.request('APIGateway', 'deleteDocumentationPart', {
-            documentationPartId: part.id,
-            restApiId: this.restApiId,
-          })
+        .then(results => results.items.map( part => {
+            if (part.location.type === "API" || this.documentationParts.some(e => (e.location.path && e.location.path[0] === '/' ? e.location.path : '/' + e.location.path) === part.location.path)){
+              aws.request('APIGateway', 'deleteDocumentationPart', {
+                documentationPartId: part.id,
+                restApiId: this.restApiId,
+              })
+            }
+          }
         ))
         .then(promises => Promise.all(promises))
         .then(() => this.documentationParts.reduce((promise, part) => {
