@@ -120,7 +120,7 @@ module.exports = function() {
           let partsToDelete = []
           for(let i = 0; i < results.items.length; ++i){
             let part = results.items[i]
-            if (part.location.type === "API" || this.documentationParts.some(e => (e.location.path && e.location.path[0] === '/' ? e.location.path : '/' + e.location.path) === part.location.path)){
+            if (part.location.type === "API" || this.documentationParts.some(e => ((e.location.path && e.location.path[0] === '/' ? e.location.path : '/' + e.location.path) === part.location.path) || (e.location.name === part.location.name))){
               partsToDelete.push(part)
             }
           }
