@@ -173,6 +173,21 @@ module.exports = function() {
           .forEach(currEvent => {
             let key = functionName + currEvent.method + currEvent.path;
             documentationObj[key] = currEvent;
+
+            if(currEvent.cors){
+              //Add other documentation to option cors
+              const keyOptions = functionName + 'options' + currEvent.path
+              documentationObj[keyOptions] =
+                {
+                  path: 'moduloName/hello3',
+                  method: 'options',
+                  integration: 'AWS',
+                  documentation: {
+                    tags: [ 'moduloName' ],
+                  }
+                }
+            }
+
           });
         return documentationObj;
       }, {});
@@ -182,12 +197,17 @@ module.exports = function() {
       const versionObject = {
         globalDocs: this.customVars.documentation,
         functionDocs: {},
+        cors: false
       }
 
       const httpEvents = this._getHttpEvents();
       Object.keys(httpEvents).forEach(funcName => {
         versionObject.functionDocs[funcName] = httpEvents[funcName].documentation;
+        //levar em consideração se existe cors ou não
+        versionObject.functionDocs[funcName].cors = httpEvents[funcName].cors ? true : false
       });
+
+      versionObject.timestamp = Date.now()
 
       autoVersion = objectHash(versionObject);
 
