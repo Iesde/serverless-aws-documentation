@@ -179,11 +179,11 @@ module.exports = function() {
               const keyOptions = functionName + 'options' + currEvent.path
               documentationObj[keyOptions] =
                 {
-                  path: 'moduloName/hello3',
+                  path: currEvent.path,
                   method: 'options',
                   integration: 'AWS',
                   documentation: {
-                    tags: [ 'moduloName' ],
+                    tags: currEvent.documentation.tags,
                   }
                 }
             }
