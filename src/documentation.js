@@ -95,6 +95,10 @@ module.exports = function() {
 
     _updateDocumentation: function _updateDocumentation() {
       const aws = this.serverless.providers.aws;
+      
+      // removing duplicated parts
+      this.documentationParts = [...new Set(this.documentationParts.map(s => JSON.stringify(s)))].map(s => JSON.parse(s))
+      
       return aws.request('APIGateway', 'getDocumentationVersion', {
         restApiId: this.restApiId,
         documentationVersion: this.getDocumentationVersion(),
